@@ -1,8 +1,9 @@
 #include <Windows.h>
-#include <iostream>
 #include "resource.h"
 
 CONST CHAR* ITEMS[] = {"This","is", "my", "first", "Combo", "box", };
+
+
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
