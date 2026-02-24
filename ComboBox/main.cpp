@@ -20,6 +20,9 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM IParam)
 	case WM_INITDIALOG:
 	{
 		HWND hCombo = GetDlgItem(hwnd, IDC_COMBO);
+		HICON hIcon = LoadIcon(GetModuleHandleA(NULL), MAKEINTRESOURCE(IDI_ICON1));
+		SendMessage(hwnd, WM_SETICON, 0, (LPARAM)hIcon);
+			
 		//AllocConsole();
 		//freopen("CONOUT$", "w", stdout);
 		for (int i = 0; i < sizeof(ITEMS)/sizeof(ITEMS[0]); ++i)
@@ -30,6 +33,22 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM IParam)
 	}
 		break;
 	case WM_COMMAND:
+		switch (LOWORD(wParam))
+		{
+		case IDOK:
+		{
+			CONST INT SIZE = 256;
+			CHAR sz_buffer[SIZE] = {};
+			HWND hCombo = GetDlgItem(hwnd, IDC_COMBO);
+
+			INT i = SendMessage(hCombo, CB_GETCURSEL, 0, 0);
+			SendMessage(hCombo, CB_GETLBTEXT, i, (LPARAM)sz_buffer);
+
+			MessageBox(hwnd, sz_buffer, "info", MB_OK | MB_ICONINFORMATION);
+		}
+			break;
+		case IDCANCEL: EndDialog(hwnd, 0);
+		}
 		break;
 	case WM_CLOSE:
 		EndDialog(hwnd, 0);
