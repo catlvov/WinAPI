@@ -1,4 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
+#include <iostream>
 #include "resource.h"
 
 CONST CHAR* ITEMS[] = {"This","is", "my", "first", "Combo", "box", };
@@ -44,7 +46,10 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM IParam)
 			INT i = SendMessage(hCombo, CB_GETCURSEL, 0, 0);
 			SendMessage(hCombo, CB_GETLBTEXT, i, (LPARAM)sz_buffer);
 
-			MessageBox(hwnd, sz_buffer, "info", MB_OK | MB_ICONINFORMATION);
+			CHAR sz_massege[SIZE] = {};
+			sprintf(sz_massege, "Вы выбрали пункт #%i, со значением \"%s\".", i,sz_buffer);
+			MessageBox(hwnd, sz_massege, "info", MB_OK | MB_ICONINFORMATION);
+
 		}
 			break;
 		case IDCANCEL: EndDialog(hwnd, 0);
