@@ -6,6 +6,7 @@
 CONST CHAR* VALUES[] = {"this","is","my","frist","List","Box"};
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM Iparam);
+BOOL CALLBACK DlgProcAdd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM Iparam);
 
 INT WINAPI WinMain(HINSTANCE hInistance, HINSTANCE hPrevInst, LPSTR IpCmdLine, INT nCmdShow)
 {
@@ -29,6 +30,9 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM Iparam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
+		case IDC_BUTTON_ADD:
+			DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, DlgProcAdd, 0);
+			break;
 		case IDOK:
 		{
 			CONST INT SIZE = 256;
@@ -45,6 +49,43 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM Iparam)
 
 		}
 			break;
+		case IDCANCEL: EndDialog(hwnd, 0);
+		}
+		break;
+	case WM_CLOSE:
+		EndDialog(hwnd, 0);
+	}
+	return FALSE;
+}
+
+BOOL CALLBACK DlgProcAdd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM Iparam)
+{
+	switch(uMsg)
+	{
+	case WM_INITDIALOG:
+		SetFocus(GetDlgItem(hwnd, IDC_EDIT_ADD));
+		break;
+	case WM_COMMAND:
+		switch (LOWORD(wParam))
+		{
+		case IDOK:
+		{
+			CONST INT SIZE = 256;
+			CHAR sz_buffer[SIZE] = {};
+			HWND hEditAdd = GetDlgItem(hwnd, IDC_EDIT_ADD);
+			SendMessageA(hEditAdd, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
+
+			if (strlen(sz_buffer) > 0)
+			{
+				HWND hParent = GetParent(hwnd); //Получаем родительское окно
+				HWND hlistBox = GetDlgItem(hParent, IDC_LIST);
+				if (SendMessage(hlistBox, LB_FINDSTRING, 0, (LPARAM)sz_buffer) == LB_ERR)
+				{
+					SendMessage(hlistBox, LB_ADDSTRING, 0, (LPARAM)sz_buffer);
+				}
+			}
+		}
+		break;
 		case IDCANCEL: EndDialog(hwnd, 0);
 		}
 		break;
