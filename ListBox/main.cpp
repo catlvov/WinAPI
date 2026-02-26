@@ -35,11 +35,15 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM Iparam)
 			if (HIWORD(wParam) == LBN_DBLCLK)
 				DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, DlgProcEdit, 0);
 			break;
-		}
-		{
-		switch ( LOWORD(wParam))
 		case IDC_BUTTON_ADD:
 			DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, DlgProcAdd, 0);
+			break;
+		case IDC_BUTTON_DELETE:
+		{
+			HWND hListBox = GetDlgItem(hwnd, IDC_LIST);
+			INT i = SendMessage(hListBox, LB_GETCURSEL, 0, 0);
+			SendMessage(hListBox, LB_DELETESTRING, i, 0);
+		}
 			break;
 		case IDOK:
 		{
